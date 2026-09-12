@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Threading;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -12,6 +13,9 @@ public class Game1 : Game
     //Player
     private Player player;
 
+    // UI
+    private SpriteFont font;
+    private UImanager uImanager;
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -25,7 +29,11 @@ public class Game1 : Game
     {
         // TODO: Add your initialization logic here
         player = new Player();
-        Player.health = 96;
+        uImanager = new UImanager();
+        Player.health = 100;
+        uImanager.Initialize();
+
+
         base.Initialize();
     }
 
@@ -33,7 +41,9 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         player.LoadContent(GraphicsDevice);
+        font = Content.Load<SpriteFont>("font");
         // TODO: use this.Content to load your game content here
+        uImanager.LoadContent(GraphicsDevice, font);
     }
 
     protected override void Update(GameTime gameTime)
@@ -54,7 +64,7 @@ public class Game1 : Game
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
         player.Draw(_spriteBatch);
-
+        uImanager.Draw(_spriteBatch);
         _spriteBatch.End();
         base.Draw(gameTime);    
     }

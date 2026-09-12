@@ -3,17 +3,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class Player
 {
+    //player rendering
     public Vector2 position;
     private Rectangle playerRect;
     private Texture2D playerTexture;
     private Rectangle playerShadowRect;
     private Texture2D playerShadowTexture;
+
+    //player health bar
     private Texture2D playerHealthBar;
     private Texture2D playerHealthBarBox;
     private Rectangle playerHealthBarRect;
     private Rectangle playerHealthBarBoxRect;
-    public static string dialogue;
     public static float health;
+
+    //Dialogue + Menu + UI
+    public static string dialogue;
+    
 
     public void LoadContent(GraphicsDevice graphicsDevice)
     {
