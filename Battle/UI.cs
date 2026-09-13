@@ -56,12 +56,13 @@ public class UI
         public Rectangle selectionRect;
         public Texture2D selectionTexture;
         public static int option;
+        private string selection;
         private KeyboardState current;
         private KeyboardState previous;
         private SpriteFont font;
         public void Initialize()
         {
-            selectionRect = new Rectangle(205,230,0,0);
+            selectionRect = new Rectangle(440,225,0,0);
         }
         public void LoadContent(GraphicsDevice graphicsDevice, SpriteFont Font)
         {
@@ -72,21 +73,30 @@ public class UI
         }
         public void DrawRectangleOutline(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X, selectionRect.Y, 15, 5), Color.RosyBrown);// horizontal
-            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X, selectionRect.Height - 5, 15, 5), Color.RosyBrown); //horizontal bottom
-            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X, selectionRect.Y, 5, 10), Color.RosyBrown);
-            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X + 15, selectionRect.Y, 5, 10), Color.RosyBrown);
+            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X, selectionRect.Y+10, (int)font.MeasureString(selection).X+10, 5), Color.RosyBrown);// horizontal
+            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X, selectionRect.Y + 35, (int)font.MeasureString(selection).X+10, 5), Color.RosyBrown); //horizontal bottom
+            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X, selectionRect.Y + 10, 5, 20), Color.RosyBrown);
+            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X + (int)font.MeasureString(selection).X, selectionRect.Y+10, 5, 20), Color.RosyBrown);
         }
         public void Draw(SpriteBatch spriteBatch)
         {
+            // options
+
+            string attack = "ATTACK";// option = 1
+            spriteBatch.DrawString(font, attack, new Vector2(450, 240), Color.BlanchedAlmond);
+            string flee = "FLEE";// option = 2
+            spriteBatch.DrawString(font, flee, new Vector2(450, 265), Color.BlanchedAlmond);
+            string items = "ITEMS";// option = 3
+            spriteBatch.DrawString(font, items, new Vector2(450, 290), Color.BlanchedAlmond);
+            selection = "ATTACK";
+
             DrawRectangleOutline(spriteBatch);
-            
         }
         public void Update()
         {
             OptionSelection();
-            if(option == 0) selectionRect.Y = 230;
-            if(option == 1) selectionRect.Y = 255;
+            if(option == 0) selectionRect.Y = 225;
+            if(option == 1) selectionRect.Y = 250;
             if(option == 2) selectionRect.Y = 280;
         }
 
@@ -108,10 +118,8 @@ public class UI
                     option--;
                 }
             }
-            if(option > 2 || option < 0)
-            {
-                option = 0;
-            }
+            if(option < 0) option = 2;
+            if(option > 2) option = 0;
             
             previous = current;
         }

@@ -23,6 +23,6 @@ public class UImanager
     public void Draw(SpriteBatch spriteBatch)
     {
         dialogue.Draw(spriteBatch);
-        moves.DrawRectangleOutline(spriteBatch);
+        moves.Draw(spriteBatch);
     }
 }
