@@ -53,6 +53,7 @@ public class Game1 : Game
 
         // TODO: Add your update logic here
         player.Update();
+        uImanager.Update();
 
         base.Update(gameTime);
     }

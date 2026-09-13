@@ -28,7 +28,6 @@
 /Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/obj/Debug/net9.0/Battle.AssemblyInfoInputs.cache
 /Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/obj/Debug/net9.0/Battle.AssemblyInfo.cs
 /Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/obj/Debug/net9.0/Battle.csproj.CoreCompileInputs.cache
-/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/obj/Debug/net9.0/Battle.sourcelink.json
 /Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/obj/Debug/net9.0/Battle.csproj.Up2Date
 /Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/obj/Debug/net9.0/Battle.dll
 /Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/obj/Debug/net9.0/refint/Battle.dll
