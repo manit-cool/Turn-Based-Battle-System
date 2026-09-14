@@ -56,50 +56,47 @@ public class UI
         public Rectangle selectionRect;
         public Texture2D selectionTexture;
         public static int option;
-        private string selection;
         private KeyboardState current;
         private KeyboardState previous;
         private SpriteFont font;
+        //colors
+        private Color attackCol; 
+        private Color fleeCol;
+        private Color itemCol;
         public void Initialize()
         {
-            selectionRect = new Rectangle(440,225,0,0);
+            option = 0;
         }
         public void LoadContent(GraphicsDevice graphicsDevice, SpriteFont Font)
         {
+            attackCol = Color.White;
+            itemCol = Color.White;
+            fleeCol = Color.White;
             selectionTexture = new Texture2D(graphicsDevice, 1, 1);
             selectionTexture.SetData(new[]{Color.White});
             previous = Keyboard.GetState();
             font = Font;
         }
-        public void DrawRectangleOutline(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X, selectionRect.Y+10, (int)font.MeasureString(selection).X+10, 5), Color.RosyBrown);// horizontal
-            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X, selectionRect.Y + 35, (int)font.MeasureString(selection).X+10, 5), Color.RosyBrown); //horizontal bottom
-            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X, selectionRect.Y + 10, 5, 20), Color.RosyBrown);
-            spriteBatch.Draw(selectionTexture, new Rectangle(selectionRect.X + (int)font.MeasureString(selection).X, selectionRect.Y+10, 5, 20), Color.RosyBrown);
-        }
         public void Draw(SpriteBatch spriteBatch)
         {
-            // options
-
+            //options
+            attackCol = Color.White;
+            fleeCol = Color.White;
+            itemCol = Color.White;
+            if(option == 0) attackCol = Color.Blue;
+            if(option == 1) fleeCol = Color.Blue;
+            if(option == 2) itemCol = Color.Blue;
             string attack = "ATTACK";// option = 1
-            spriteBatch.DrawString(font, attack, new Vector2(450, 240), Color.BlanchedAlmond);
+            spriteBatch.DrawString(font, attack, new Vector2(450, 240), attackCol);
             string flee = "FLEE";// option = 2
-            spriteBatch.DrawString(font, flee, new Vector2(450, 265), Color.BlanchedAlmond);
+            spriteBatch.DrawString(font, flee, new Vector2(450, 265), fleeCol);
             string items = "ITEMS";// option = 3
-            spriteBatch.DrawString(font, items, new Vector2(450, 290), Color.BlanchedAlmond);
-            selection = "ATTACK";
-
-            DrawRectangleOutline(spriteBatch);
+            spriteBatch.DrawString(font, items, new Vector2(450, 290), itemCol);
         }
         public void Update()
         {
-            OptionSelection();
-            if(option == 0) selectionRect.Y = 225;
-            if(option == 1) selectionRect.Y = 250;
-            if(option == 2) selectionRect.Y = 280;
+           OptionSelection();
         }
-
         public void OptionSelection()
         {
             current = Keyboard.GetState();
