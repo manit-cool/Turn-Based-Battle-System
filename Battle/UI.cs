@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Battle;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -63,6 +64,14 @@ public class UI
         private Color attackCol; 
         private Color fleeCol;
         private Color itemCol;
+        // Option texts
+        private string attack;
+        public bool attacking;
+        private string flee;
+        public bool fleeing;
+        private string items;
+        public bool iteming;
+
         public void Initialize()
         {
             option = 0;
@@ -76,6 +85,11 @@ public class UI
             selectionTexture.SetData(new[]{Color.White});
             previous = Keyboard.GetState();
             font = Font;
+
+            //options setup
+            attack = "ATTACK";// option = 1
+            flee = "FLEE";// option = 2
+            items = "ITEMS";// option = 3
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -86,12 +100,9 @@ public class UI
             if(option == 0) attackCol = Color.Blue;
             if(option == 1) fleeCol = Color.Blue;
             if(option == 2) itemCol = Color.Blue;
-            string attack = "ATTACK";// option = 1
-            spriteBatch.DrawString(font, attack, new Vector2(450, 240), attackCol);
-            string flee = "FLEE";// option = 2
-            spriteBatch.DrawString(font, flee, new Vector2(450, 265), fleeCol);
-            string items = "ITEMS";// option = 3
-            spriteBatch.DrawString(font, items, new Vector2(450, 290), itemCol);
+            spriteBatch.DrawString(font, attack, new Vector2(400, 240), attackCol);
+            spriteBatch.DrawString(font, flee, new Vector2(400, 265), fleeCol);
+            spriteBatch.DrawString(font, items, new Vector2(400, 290), itemCol);
         }
         public void Update()
         {
@@ -115,10 +126,52 @@ public class UI
                     option--;
                 }
             }
+            if(current.IsKeyDown(Keys.Enter))
+            {
+                if(previous.IsKeyUp(Keys.Enter) && option == 1 && attacking == false && iteming == false) // flee
+                {
+                    attack = "";
+                    flee =  "click on esc to leave";
+                    items = "";
+                    fleeing = true;
+                }
+                if(previous.IsKeyUp(Keys.Enter) && option == 0 && fleeing == false && iteming == false) // attack
+                {
+                    attack = "The Wrath of The Beigel God";
+                    flee = "The Arm of Sporks";
+                    items = "The Rage of The Beetroot";
+                    attacking = true;
+                }
+                if(previous.IsKeyUp(Keys.Enter) && option == 2 && fleeing == false && attacking == false)
+                {
+                    attack = "bleh bleh bleh (+5 health)";
+                    flee = "ykw i'm tired (fleed)";
+                    items= "self infliction (!*garunteed -25 to the enemy*!)";
+                }
+            }
+            if(current.IsKeyDown(Keys.Q))
+            {
+                if(previous.IsKeyUp(Keys.Q))
+                {
+                    attack = "ATTACK";
+                    items = "ITEMS";
+                    flee = "FLEE"; 
+                    attacking = false;
+                    fleeing = false;
+                    iteming = false;
+                }
+            }
+
+
+
             if(option < 0) option = 2;
             if(option > 2) option = 0;
             
             previous = current;
+        }
+        public void BeigelGod()
+        {
+            
         }
     }    
 }   
