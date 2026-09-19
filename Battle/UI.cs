@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Battle;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -68,13 +69,32 @@ public class UI
         private string attack;
         public bool attacking;
         private string flee;
-        public bool fleeing;
+        public static bool fleeing;
         private string items;
         public bool iteming;
+        // item constraints
+        public bool heal;
+        public bool emd;
+        public bool si;
 
+        //beigel stuff
+        public bool beigleSummon;
+        public double beigelTime;
+
+        public bool movement;
+
+        //attacks
+        public Rectangle beigleRect;
         public void Initialize()
         {
             option = 0;
+            heal = true;
+            emd = true;
+            si = true;
+            //options setup
+            attack = "ATTACK";// option = 1
+            flee = "FLEE";// option = 2
+            items = "ITEMS";// option = 3
         }
         public void LoadContent(GraphicsDevice graphicsDevice, SpriteFont Font)
         {
@@ -86,10 +106,8 @@ public class UI
             previous = Keyboard.GetState();
             font = Font;
 
-            //options setup
-            attack = "ATTACK";// option = 1
-            flee = "FLEE";// option = 2
-            items = "ITEMS";// option = 3
+            beigleSummon = false;
+            beigleRect = new Rectangle(0, 134, 64, 64);
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -100,13 +118,26 @@ public class UI
             if(option == 0) attackCol = Color.Blue;
             if(option == 1) fleeCol = Color.Blue;
             if(option == 2) itemCol = Color.Blue;
+
             spriteBatch.DrawString(font, attack, new Vector2(400, 240), attackCol);
             spriteBatch.DrawString(font, flee, new Vector2(400, 265), fleeCol);
             spriteBatch.DrawString(font, items, new Vector2(400, 290), itemCol);
+            if(beigleSummon)
+            {
+                spriteBatch.Draw(Game1.beigleTexture, beigleRect, Color.White);
+                spriteBatch.DrawString(font, attack, new Vector2(554 - font.MeasureString(attack).X, beigleRect.Y - 50), Color.BlanchedAlmond);
+            }
+
         }
-        public void Update()
+        public void Update(GameTime gameTime)
         {
-           OptionSelection();
+            if(beigleSummon)
+            {
+                beigelTime += gameTime.ElapsedGameTime.TotalSeconds;
+                BeigelGod();
+            }
+            
+            OptionSelection();
         }
         public void OptionSelection()
         {
@@ -128,27 +159,66 @@ public class UI
             }
             if(current.IsKeyDown(Keys.Enter))
             {
-                if(previous.IsKeyUp(Keys.Enter) && option == 1 && attacking == false && iteming == false) // flee
+                //options
+                if(previous.IsKeyUp(Keys.Enter) && option == 1 && attacking == false && iteming == false && fleeing == false) // flee
                 {
-                    attack = "";
-                    flee =  "click on esc to leave";
-                    items = "";
                     fleeing = true;
                 }
-                if(previous.IsKeyUp(Keys.Enter) && option == 0 && fleeing == false && iteming == false) // attack
+
+                if(previous.IsKeyUp(Keys.Enter) && attacking == true)
+                {
+                    if(option == 0 && beigleSummon == false && attack != "wait")
+                    {
+                        beigleSummon = true;
+                        attack = "wait";
+                    }
+                }
+
+                if(previous.IsKeyUp(Keys.Enter) && option == 0 && fleeing == false && iteming == false && attacking == false) // attack
                 {
                     attack = "The Wrath of The Beigel God";
                     flee = "The Arm of Sporks";
                     items = "The Rage of The Beetroot";
                     attacking = true;
+
                 }
-                if(previous.IsKeyUp(Keys.Enter) && option == 2 && fleeing == false && attacking == false)
+
+                //*options* options
+                if(previous.IsKeyUp(Keys.Enter) && iteming == true)
                 {
-                    attack = "bleh bleh bleh (+5 health)";
-                    flee = "ykw i'm tired (fleed)";
-                    items= "self infliction (!*garunteed -25 to the enemy*!)";
+                    if(option == 0 && attack != "item used" && heal == true)
+                    {
+                        Player.health+=25;
+                        attack = "item used";
+                        heal = false;
+                    }
+                    if(option == 1 && flee != "item used" && emd == true)
+                    {
+                        Player.health -= 25;
+                        flee = "item used";
+                        emd = false;
+                    }
+                    //last option tbd once enemy has been added! (si for bool)
+                    if(option == 2 && items != "item used" && si == true)
+                    {
+                        //prolly smth like enemy.health -=
+                        items = "item used";
+                        si = false;
+                    }
+                }
+                if(previous.IsKeyUp(Keys.Enter) && option == 2 && fleeing == false && attacking == false && iteming == false) // items
+                {
+                    attack = "bleh bleh bleh (+25 health)";
+                    flee = "emotional damage (-25 to you)";
+                    items= "self infliction (-25 to enemy)";
+                    iteming = true;
+                    if(heal == false) attack = "item used";
+                    if(emd == false) flee = "item used";
+                    if(si == false) items = "item used";
                 }
             }
+
+
             if(current.IsKeyDown(Keys.Q))
             {
                 if(previous.IsKeyUp(Keys.Q))
@@ -162,8 +232,6 @@ public class UI
                 }
             }
 
-
-
             if(option < 0) option = 2;
             if(option > 2) option = 0;
             
@@ -171,7 +239,16 @@ public class UI
         }
         public void BeigelGod()
         {
-            
+            movement = false;
+            if (beigleRect.X < 554)
+            {
+                beigleRect.X += 1;            
+            }
+            else
+            {
+                movement = true;
+            }
+            //beigleSummon = false;
         }
     }    
 }   

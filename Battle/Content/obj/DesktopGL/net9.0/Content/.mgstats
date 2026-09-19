@@ -1,2 +1,4 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
 "/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/Content/File.spritefont","/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/Content/bin/DesktopGL/Content/font.xnb","LocalizedFontProcessor","SpriteFontContent",1799,21531,0.175187
+"/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/Content/pixil-frame-0.png","/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/Content/bin/DesktopGL/Content/pixil-frame-0.xnb","TextureProcessor","Texture2DContent",974,16469,0.108053
+"/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/Content/seagull.png","/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/Content/bin/DesktopGL/Content/seagull.xnb","TextureProcessor","Texture2DContent",912,16469,0.003042

@@ -12,7 +12,9 @@ public class Game1 : Game
 
     //Player
     private Player player;
-
+    // Player moves textures
+    public static Texture2D beigleTexture;
+    public static Texture2D seagullTexture;
     // UI
     private SpriteFont font;
     private UImanager uImanager;
@@ -30,10 +32,8 @@ public class Game1 : Game
         // TODO: Add your initialization logic here
         player = new Player();
         uImanager = new UImanager();
-        Player.health = 100;
+        Player.health = 10;
         uImanager.Initialize();
-
-
         base.Initialize();
     }
 
@@ -42,18 +42,22 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         player.LoadContent(GraphicsDevice);
         font = Content.Load<SpriteFont>("font");
+
+        beigleTexture = Content.Load<Texture2D>("pixil-frame-0");
+        seagullTexture = Content.Load<Texture2D>("seagull");
+        
         // TODO: use this.Content to load your game content here
         uImanager.LoadContent(GraphicsDevice, font);
     }
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || UI.Moves.fleeing == true)
             Exit();
         
         // TODO: Add your update logic here
         player.Update();
-        uImanager.Update();
+        uImanager.Update(gameTime);
 
         base.Update(gameTime);
     }

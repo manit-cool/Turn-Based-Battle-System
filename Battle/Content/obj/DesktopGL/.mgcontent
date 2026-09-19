@@ -5,8 +5,12 @@
   <Config />
   <SourceFiles>
     <File>/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/Content/File.spritefont</File>
+    <File>/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/Content/pixil-frame-0.png</File>
+    <File>/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/Content/seagull.png</File>
   </SourceFiles>
   <DestFiles>
     <File>font.spritefont</File>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
   </DestFiles>
 </SourceFileCollection>

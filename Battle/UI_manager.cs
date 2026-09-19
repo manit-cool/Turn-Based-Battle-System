@@ -16,9 +16,9 @@ public class UImanager
         dialogue.SetupDialogue(graphicsDevice, font);
         moves.LoadContent(graphicsDevice, font);
     }
-    public void Update()
+    public void Update(GameTime gameTime)
     {
-        moves.Update();
+        moves.Update(gameTime);
     }
     public void Draw(SpriteBatch spriteBatch)
     {

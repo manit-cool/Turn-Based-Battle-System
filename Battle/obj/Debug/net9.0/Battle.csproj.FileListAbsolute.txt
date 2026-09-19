@@ -35,3 +35,5 @@
 /Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/obj/Debug/net9.0/Battle.genruntimeconfig.cache
 /Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/obj/Debug/net9.0/ref/Battle.dll
 /Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/bin/Debug/net9.0/Content/font.xnb
+/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/bin/Debug/net9.0/Content/pixil-frame-0.xnb
+/Users/manitgupta/Coding/Turn-Based-Battle-System/Battle/bin/Debug/net9.0/Content/seagull.xnb
