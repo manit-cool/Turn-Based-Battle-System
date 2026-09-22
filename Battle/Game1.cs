@@ -12,6 +12,7 @@ public class Game1 : Game
 
     //Player
     private Player player;
+    private Enemy enemy;
     // Player moves textures
     public static Texture2D beigleTexture;
     public static Texture2D seagullTexture;
@@ -31,8 +32,10 @@ public class Game1 : Game
     {
         // TODO: Add your initialization logic here
         player = new Player();
+        enemy = new Enemy();
         uImanager = new UImanager();
-        Player.health = 10;
+        Player.health = 100;
+        Enemy.health = 100;
         uImanager.Initialize();
         base.Initialize();
     }
@@ -41,6 +44,7 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         player.LoadContent(GraphicsDevice);
+        enemy.LoadContent(GraphicsDevice);
         font = Content.Load<SpriteFont>("font");
 
         beigleTexture = Content.Load<Texture2D>("pixil-frame-0");
@@ -57,6 +61,7 @@ public class Game1 : Game
         
         // TODO: Add your update logic here
         player.Update();
+        enemy.Update();
         uImanager.Update(gameTime);
 
         base.Update(gameTime);
@@ -72,6 +77,7 @@ public class Game1 : Game
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
         player.Draw(_spriteBatch);
+        enemy.Draw(_spriteBatch);
         uImanager.Draw(_spriteBatch);
         _spriteBatch.End();
         base.Draw(gameTime);    

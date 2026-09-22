@@ -25,9 +25,11 @@ public class UI
         {
             //Dialogue
             //start
-            dialogues.Add("So we're playing the waiting game...");
+            dialogues.Add("So we're playing\nthe waiting game...");
             //attacks
-            dialogues.Add("After months in the toaster, it's ready. BEIGEL GOD, I SUMMON YOU");
+            dialogues.Add("After months in the toaster,\nit's ready.\nBEIGEL GOD, I SUMMON YOU");
+            //items
+            dialogues.Add("What are we\nstocking up on?");
             // getting attacked/died
             dialogues.Add("Wow you hit me, I'm so scared");
             dialogues.Add("ig you win this time");
@@ -37,7 +39,7 @@ public class UI
             playerDialogueTexture = new Texture2D(graphicsDevice, 1, 1);
             playerDialogueTexture.SetData(new[]{Color.White});
             //Enemy UI
-            enemyDialogueRectangle = new Rectangle();
+            enemyDialogueRectangle = new Rectangle(20, 53, 480, 80);
             enemyDialogueTexture = new Texture2D(graphicsDevice, 1,1);
             enemyDialogueTexture.SetData(new[] {Color.White});
             //Others
@@ -46,11 +48,22 @@ public class UI
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(playerDialogueTexture, playerDialogueRectangle, Color.Gray);
+            spriteBatch.Draw(enemyDialogueTexture, enemyDialogueRectangle, Color.Gray);
 
 
             //TBD --> Moves CHANGE THE WAY THE DIALOGUE IS SETUP :D (VARIABLE NAME = Moves.option)
-            String dia = "OKAY BUD, LET'S \nSEE YOU SURVIVE THIS!";
-            spriteBatch.DrawString(font, dia, new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+font.MeasureString(dia).Y/2), Color.Black);
+            if(Moves.option == 0 && Moves.beigleSummon)
+            {
+                spriteBatch.DrawString(font, dialogues[1], new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+10), Color.Black);
+            }
+            else if(Moves.iteming)
+            {
+                spriteBatch.DrawString(font, dialogues[1], new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+10), Color.Black);
+            }
+            else
+            {
+                spriteBatch.DrawString(font, dialogues[0], new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+10), Color.Black);
+            }
         }
     }
     public class Moves
@@ -67,20 +80,19 @@ public class UI
         private Color itemCol;
         // Option texts
         private string attack;
-        public bool attacking;
+        public static bool attacking;
         private string flee;
         public static bool fleeing;
         private string items;
-        public bool iteming;
+        public static bool iteming;
         // item constraints
         public bool heal;
         public bool emd;
         public bool si;
 
         //beigel stuff
-        public bool beigleSummon;
+        public static bool beigleSummon;
         public double beigelTime;
-
         public bool movement;
 
         //attacks
@@ -107,7 +119,8 @@ public class UI
             font = Font;
 
             beigleSummon = false;
-            beigleRect = new Rectangle(0, 134, 64, 64);
+            beigleRect = new Rectangle(0, 164, 64, 64);
+            beigelTime = 0;
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -125,7 +138,27 @@ public class UI
             if(beigleSummon)
             {
                 spriteBatch.Draw(Game1.beigleTexture, beigleRect, Color.White);
-                spriteBatch.DrawString(font, attack, new Vector2(554 - font.MeasureString(attack).X, beigleRect.Y - 50), Color.BlanchedAlmond);
+                if(movement)
+                {  
+
+                    if(beigelTime < 2) spriteBatch.DrawString(font, "What was I supposed to do?", new Vector2(554 - font.MeasureString("What was I supposed to do?").X + 50, beigleRect.Y - 20), Color.BlanchedAlmond);                
+                
+                    if(beigelTime > 2 && beigelTime < 4)
+                    {
+                        spriteBatch.DrawString(font, "Oh yeah, TIME TO SUFFER ENEMY", new Vector2(554 - font.MeasureString("Oh yeah, TIME TO SUFFER ENEMY").X + 50, beigleRect.Y - 20), Color.BlanchedAlmond);
+                    }
+
+                    if(beigleRect.Y < 51 && beigelTime < 8)
+                    {
+                        spriteBatch.DrawString(font, "heh, THAT'S THE WRATH OF THE BEIGEL GOD", new Vector2(554 - font.MeasureString("heh, THAT'S THE WRATH OF THE BEIGEL GOD").X, beigleRect.Y + 20), Color.BlanchedAlmond);
+                    }
+                    if(beigelTime > 8  && beigelTime < 10 ) spriteBatch.DrawString(font, "well idk what to do now, OH NO I LEFT THE TOASTER ON, I GTG", new Vector2(554 - font.MeasureString("well idk what to do now, OH NO I LEFT THE TOASTER ON, I GTG").X, beigleRect.Y + 20), Color.BlanchedAlmond);
+                    if(beigelTime > 12) 
+                    {
+                        beigleSummon = false;
+                        Enemy.health -= 33;
+                    }
+                }
             }
 
         }
@@ -169,6 +202,8 @@ public class UI
                 {
                     if(option == 0 && beigleSummon == false && attack != "wait")
                     {
+                        beigelTime = 0;
+                        beigleRect = new Rectangle(0, 164, 64, 64);
                         beigleSummon = true;
                         attack = "wait";
                     }
@@ -194,14 +229,14 @@ public class UI
                     }
                     if(option == 1 && flee != "item used" && emd == true)
                     {
-                        Player.health -= 25;
+                        Enemy.health -= 25;
                         flee = "item used";
                         emd = false;
                     }
                     //last option tbd once enemy has been added! (si for bool)
                     if(option == 2 && items != "item used" && si == true)
                     {
-                        //prolly smth like enemy.health -=
+                        Player.health -= 25;
                         items = "item used";
                         si = false;
                     }
@@ -248,7 +283,12 @@ public class UI
             {
                 movement = true;
             }
-            //beigleSummon = false;
+            if(movement == false) beigelTime = 0;
+
+            if(beigelTime > 4 && beigleRect.Y > 50)
+            {
+                beigleRect.Y -= 1;
+            }
         }
     }    
 }   

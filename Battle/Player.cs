@@ -19,7 +19,6 @@ public class Player
 
     //Dialogue + Menu + UI
     public static string dialogue;
-    
 
     public void LoadContent(GraphicsDevice graphicsDevice)
     {
