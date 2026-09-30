@@ -25,14 +25,19 @@ public class UI
         {
             //Dialogue
             //start
-            dialogues.Add("So we're playing\nthe waiting game...");
+            dialogues.Add("So we're playing\nthe waiting game..."); // 0 
             //attacks
-            dialogues.Add("After months in the toaster,\nit's ready.\nBEIGEL GOD, I SUMMON YOU");
+            dialogues.Add("After months in the toaster,\nit's ready.\nBEIGEL GOD, LOCK IN"); // 1
             //items
-            dialogues.Add("What are we\nstocking up on?");
+            dialogues.Add("What are we\nstocking up on?"); // 2
+            dialogues.Add("ooo healing up"); // bleh bleh bleh 3
+            dialogues.Add("why would you do th-\n WHAT"); // emotional damage 4
+            dialogues.Add("Smart choi-\nWait how-");// self infliction 5
             // getting attacked/died
-            dialogues.Add("Wow you hit me, I'm so scared");
-            dialogues.Add("ig you win this time");
+            dialogues.Add("Wow you hit me, I'm so scared"); // 6
+            dialogues.Add("ig you win this time"); // 7
+            //more
+            dialogues.Add("YOU GOT THIS BROSKI"); // 8
 
             //Player UI
             playerDialogueRectangle = new Rectangle(165, 230, 450, 80);
@@ -52,15 +57,32 @@ public class UI
 
 
             //TBD --> Moves CHANGE THE WAY THE DIALOGUE IS SETUP :D (VARIABLE NAME = Moves.option)
-            if(Moves.option == 0 && Moves.beigleSummon)
+
+            if(Moves.iteming && Moves.heal == true && Moves.emd == true && Moves.si == true)
+            {
+                spriteBatch.DrawString(font, dialogues[2], new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+10), Color.Black);
+            }
+            if(!Moves.heal && Moves.iteming && Moves.option == 0)
+            {
+                spriteBatch.DrawString(font, dialogues[3], new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+10), Color.Black);
+            }
+            if(!Moves.emd && Moves.iteming && Moves.option == 1)
+            {
+                spriteBatch.DrawString(font, dialogues[4], new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+10), Color.Black);
+            }
+            if(!Moves.si && Moves.iteming && Moves.option == 2)
+            {
+                spriteBatch.DrawString(font, dialogues[5], new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+10), Color.Black);
+            }
+            if(Moves.movement && Moves.beigleSummon)
             {
                 spriteBatch.DrawString(font, dialogues[1], new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+10), Color.Black);
             }
-            else if(Moves.iteming)
+            if(Moves.option == 0 && Moves.beigleSummon && !Moves.movement)
             {
-                spriteBatch.DrawString(font, dialogues[1], new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+10), Color.Black);
+                spriteBatch.DrawString(font, dialogues[8], new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+10), Color.Black);
             }
-            else
+            else if(!Moves.attacking && !Moves.iteming)
             {
                 spriteBatch.DrawString(font, dialogues[0], new Vector2(playerDialogueRectangle.X+10, playerDialogueRectangle.Y+10), Color.Black);
             }
@@ -86,19 +108,22 @@ public class UI
         private string items;
         public static bool iteming;
         // item constraints
-        public bool heal;
-        public bool emd;
-        public bool si;
+        public static bool heal;
+        public static bool emd;
+        public static bool si;
 
         //beigel stuff
         public static bool beigleSummon;
         public double beigelTime;
-        public bool movement;
+        public static bool movement;
+        public static bool isBait;
+        public int bait;
 
         //attacks
         public Rectangle beigleRect;
         public void Initialize()
         {
+            bait = 7;
             option = 0;
             heal = true;
             emd = true;
@@ -117,7 +142,6 @@ public class UI
             selectionTexture.SetData(new[]{Color.White});
             previous = Keyboard.GetState();
             font = Font;
-
             beigleSummon = false;
             beigleRect = new Rectangle(0, 164, 64, 64);
             beigelTime = 0;
@@ -164,12 +188,23 @@ public class UI
         }
         public void Update(GameTime gameTime)
         {
+            if(bait % 2 == 0)
+            {
+                isBait = false;
+            }
+            else
+            {
+                isBait = true;
+            }
+            if (isBait)
+            {
+                beigleSummon = false;
+            }
             if(beigleSummon)
             {
                 beigelTime += gameTime.ElapsedGameTime.TotalSeconds;
                 BeigelGod();
             }
-            
             OptionSelection();
         }
         public void OptionSelection()
@@ -277,7 +312,7 @@ public class UI
             movement = false;
             if (beigleRect.X < 554)
             {
-                beigleRect.X += 1;            
+                beigleRect.X += 1;
             }
             else
             {
